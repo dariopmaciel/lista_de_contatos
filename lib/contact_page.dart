@@ -11,26 +11,27 @@ class ContactPad extends StatefulWidget {
   State<ContactPad> createState() => _ContactPadState();
 }
 
+var url1 = Uri.parse("https://jsonplaceholder.typicode.com/users");
+
 class _ContactPadState extends State<ContactPad> {
-  List<Api> _api = [];
+  List<Api> _api = []; //Adicionar uma lista já vazia a variavel.
+  bool visual =
+      false; //Cria uma variavel para ajudar a so mostrar quando terminar o carregamento da requisição
 
   Future<List<Api>?> _getUser() async {
-    http.Response response;
-    var url1 = Uri.parse("https://jsonplaceholder.typicode.com/users");
-
     try {
-      List<Api> listUser = [];
+      List<Api> listuser = [];
       final response = await http.get(url1);
       if (response.statusCode == 200) {
         var decodeJson = jsonDecode(response.body);
-        decodeJson.forEach((item) => listUser.add(Api.fromJson(item)));
-        return listUser;
+        decodeJson.forEach((item) => listuser.add(Api.fromJson(item)));
+        return listuser;
       } else {
-        print("Erro ao carregar lista" + response.statusCode.toString());
+        print("error ao conectar na lista" + response.statusCode.toString());
         return null;
       }
-    } catch (e) {
-      print("Erro ao carregar lista" + e.toString());
+    } catch (e, stacktrace) {
+      print("error ao conectar na lista" + stacktrace.toString());
       return null;
     }
   }
@@ -39,8 +40,11 @@ class _ContactPadState extends State<ContactPad> {
   void initState() {
     super.initState();
     _getUser().then((map) {
-      _api = map!;
-      print("Existem ${_api?.length} itens dentro da API");
+      setState(() {
+        //muda o status da variavel
+        _api = map!;
+        visual = true; //muda a visualização para verdadeira
+      });
     });
   }
 
@@ -144,14 +148,16 @@ class _ContactPadState extends State<ContactPad> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const <Widget>[
+                        children: <Widget>[
                           Text(
-                            "NOme",
-                            style: TextStyle(
+                            _api[index].name.toString(),
+                            //"nome",
+                            style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            "Endereço da pessoa que esta vindo me visitar ou que eu tenha contato",
+                            _api[index].address!.street.toString(),
+                            // "Endereço da pessoa que esta vindo me visitar ou que eu tenha contato",
                             style: TextStyle(
                               fontSize: 16,
                               overflow: TextOverflow.ellipsis,
