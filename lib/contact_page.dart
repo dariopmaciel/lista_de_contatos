@@ -12,25 +12,25 @@ class ContactPad extends StatefulWidget {
 }
 
 class _ContactPadState extends State<ContactPad> {
-  List<Api>? _api = [];
+  List<Api> _api = [];
 
   Future<List<Api>?> _getUser() async {
     http.Response response;
     var url1 = Uri.parse("https://jsonplaceholder.typicode.com/users");
 
     try {
-      List<Api>? listUser = [];
+      List<Api> listUser = [];
       final response = await http.get(url1);
       if (response.statusCode == 200) {
         var decodeJson = jsonDecode(response.body);
         decodeJson.forEach((item) => listUser.add(Api.fromJson(item)));
         return listUser;
       } else {
-        print("Erro ao carregar lista");
+        print("Erro ao carregar lista" + response.statusCode.toString());
         return null;
       }
     } catch (e) {
-      print("Erro ao carregar lista");
+      print("Erro ao carregar lista" + e.toString());
       return null;
     }
   }
@@ -38,9 +38,10 @@ class _ContactPadState extends State<ContactPad> {
   @override
   void initState() {
     super.initState();
-    
-
-
+    _getUser().then((map) {
+      _api = map!;
+      print("Existem ${_api?.length} itens dentro da API");
+    });
   }
 
   @override
@@ -93,7 +94,7 @@ class _ContactPadState extends State<ContactPad> {
                     height: 60,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: 10,
+                        itemCount: _api.length,
                         itemBuilder: (BuildContext context, int index) {
                           return CircleAvatar(
                             radius: 35,
