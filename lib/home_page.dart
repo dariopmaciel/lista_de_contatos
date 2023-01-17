@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:lista_de_contatos/top_bar.dart';
+import 'package:lista_de_contatos/contact_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
       ),
       drawer: const Drawer(),
-      body: Column(children: const <Widget>[TopBar()]),
+      body: Column(children: const <Widget>[ContactPad()]),
     );
   }
 }
