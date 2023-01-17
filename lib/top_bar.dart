@@ -146,12 +146,12 @@ class _TopBarState extends State<TopBar> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              _api[index].name,
+                              _api[index].name.toString(),
                               style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              _api[index].address.street,
+                              _api[index].address!.street.toString(),
                               style: const TextStyle(fontSize: 17),
                               overflow: TextOverflow.ellipsis,
                             )
